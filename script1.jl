@@ -1,7 +1,10 @@
 using Plots
 
 
-Teams = Dict(
+Wins = [2, 16, 15, 5, 12, 6]
+
+TEAMS = Dict(
+    #AFC Teams
     1 => "Chiefs",
     2 => "Bills",  
     3 => "Steelers", 
@@ -9,6 +12,7 @@ Teams = Dict(
     5 => "Ravens",     
     6 => "Browns", 
     7 => "Colts",
+    #NFC Teams
     11 => "Packers", 
     12 => "Saints", 
     13 => "Seahawks", 
@@ -18,9 +22,7 @@ Teams = Dict(
     17 => "Bears"
 )
 
-Scores = [1, 2, 4, 8]
-
-Picks = Dict(
+PICKS = Dict(
     "Akhil" => [[15, 13, 12, 5, 3, 2], [11, 12, 1, 2], [11, 2], [2]],
     "Steve" => [[15, 13, 12, 4, 3, 2], [11, 12, 1, 2], [11, 2], [2]],
     "Dustin"=> [[15, 13, 12, 5, 3, 2], [11, 12, 1, 2], [12, 1], [1]],
@@ -31,29 +33,86 @@ Picks = Dict(
     "Ben"   => [[15, 13, 12, 5, 3, 2], [15, 12, 5, 2], [12, 2], [2]]
 )
 
-Wins = [2, 16, 15, 5, 12, 6]
+struct Game
+    team1::Int8
+    team2::Int8
+end
+Game(X::Vector) = Game(X[1],X[2])
+get_anno(g::Game) = TEAMS[g.team1] * " vs. " * TEAMS[g.team2]
 
+WC_GAMES = [Game( 2,  7),
+            Game(13, 16),
+            Game(14, 15),
+            Game( 4,  5),
+            Game(12, 17),
+            Game( 3,  6)]
 
-function outs(g)
-    o = []
-    for i in g
-        push!(o,i[1])
-        push!(o,i[2])
+row_idxs(row_num) = 2^(row_num-1):2^(row_num)-1
+parent_idx(idx) = idx > 1 ? floor(idx÷2) : 0
+function get_winners(idx, gtree) 
+    if idx == 1
+        return Int8[]
+    elseif iseven(idx)
+        return [gtree[parent_idx(idx)].team1; get_winners(parent_idx(idx), gtree)]
+    else
+        return [gtree[parent_idx(idx)].team2; get_winners(parent_idx(idx), gtree)]
     end
-    o
 end
 
-function get_precs(r,c)
-    precs = [c]
-    for i in 1:r-2
-        if isodd(c)
-            c+=1
+function get_row(idx)
+    for n = 1:13
+        if 2^n > idx
+            return n
         end
-        c = c÷2
-        pushfirst!(precs,c)
     end
-    return precs
 end
+
+function get_coords(idx)
+    row = get_row(idx)
+    n_row_els = 
+end
+
+# GTREE will be big vector of games, linked structure is implied and does not need to be carried
+GTREE = Game[]
+
+# Add in the WC Games
+for ii = 1:6
+    [push!(GTREE, WC_GAMES[ii]) for dummy in row_idxs(ii)];
+end
+
+# Game 7 - Best NFC team (id 11) plays weakest from winners of games 2,3,5
+[idx |> x->get_winners(x,GTREE)[[2,3,5]] |> maximum |> x->Game(11,x) |> x->push!(GTREE,x) for idx in row_idxs(7)];
+
+# Game 8 - Top winning AFC wildcard teams, so lowest seed winners from games 1,4,6
+[idx |> x->get_winners(x,GTREE)[[1,4,6]] |> x->partialsort!(x,1:2) |> collect |> Game |> x->push!(GTREE,x) for idx in row_idxs(8)];
+
+# Game 9 - Best AFC team (id 1) plays weakest from winners of games 1,4,6
+[idx |> x->get_winners(x,GTREE)[[1,4,6]] |> maximum |> x->Game(1,x) |> x->push!(GTREE,x) for idx in row_idxs(9)];
+
+# Game 10 - Top winning NFC wildcard teams, so lowest seed winners from games 2,3,5
+[idx |> x->get_winners(x,GTREE)[[2,3,5]] |> x->partialsort!(x,1:2) |> collect |> Game |> x->push!(GTREE,x) for idx in row_idxs(10)];
+
+# Game 11 - AFC Championship game - this will be winners of games 8 and 9
+[idx |> x->get_winners(x,GTREE)[[ 8, 9]] |> sort! |> Game |> x->push!(GTREE,x) for idx in row_idxs(11)];
+
+# Game 12 - NFC Championship game - this will be winners of games 7 and 10
+[idx |> x->get_winners(x,GTREE)[[ 7,10]] |> sort! |> Game |> x->push!(GTREE,x) for idx in row_idxs(12)];
+
+# Game 13 - Superbowl - this will be winners of games 11 and 12
+[idx |> x->get_winners(x,GTREE)[[11,12]] |> sort! |> Game |> x->push!(GTREE,x) for idx in row_idxs(13)];
+
+
+
+## 
+p = plot([0],[0], legend=false, xlims = [0,14], ylims = [0,1], xticks=:none, yticks=:none);
+
+#Write in the games
+annotate!(p, [(c[1],c[2],Plots.text(string(scr), 6, :center)) for (c,scr) in zip(get_coords.(1:length(GTREE)),GTREE)]);
+
+# annotate!(p, [(x,y,Plots.text(string(scr), 6, :center)) for (x,y,scr) in zip(Xp,Yp,winning_scores)]);
+
+
+
 
 function get_score(picks, wins; scores = Scores)
 
@@ -64,108 +123,6 @@ function get_score(picks, wins; scores = Scores)
 
     rd1 + rd2 + rd3 + rd4
 end
-
-GAMES = [[ 2,  7],
-         [13, 16],
-         [14, 15],
-         [ 4,  5],
-         [12, 17],
-         [ 3,  6]]
-
-ROWS_G = []
-ROWS_W = []
-
-# First game
-push!(ROWS_G,[GAMES[1]])
-push!(ROWS_W, outs(ROWS_G[end]))
-
-
-# Rest of Wildcard
-for G in GAMES[2:end]
-    push!(ROWS_G, repeat([G],length(ROWS_G[end])*2))
-    push!(ROWS_W, outs(ROWS_G[end]))
-end
-
-
-#Divisional Games
-#First is AFC game, where Rams play the weakest link from games 2,3,5
-tr = []
-for ii in 1:length(ROWS_W[end])
-    coords = get_precs(7,ii)
-    A_wins = [ROWS_W[2][coords[2]],ROWS_W[3][coords[3]],ROWS_W[5][coords[5]]]
-    worst_team = maximum(A_wins)
-    push!(tr,[11,worst_team])
-end
-push!(ROWS_G,tr)
-push!(ROWS_W, outs(ROWS_G[end]))
-
-#Then NFC game, where the two highest ranked winners from games 1,4,6 play each other
-tr = []
-for ii in 1:length(ROWS_W[end])
-    coords = get_precs(8,ii)
-    N_wins = [ROWS_W[1][coords[1]],ROWS_W[4][coords[4]],ROWS_W[6][coords[6]]]
-    best_teams = partialsort!(N_wins,1:2)
-    push!(tr,best_teams)
-end
-push!(ROWS_G,tr)
-push!(ROWS_W, outs(ROWS_G[end]))
-
-#Then NFC game, where Chiefs play worst seed from 1,4,6
-tr = []
-for ii in 1:length(ROWS_W[end])
-    coords = get_precs(9,ii)
-    N_wins = [ROWS_W[1][coords[1]],ROWS_W[4][coords[4]],ROWS_W[6][coords[6]]]
-    worst_team = maximum(N_wins)
-    push!(tr,[1,worst_team])
-end
-push!(ROWS_G,tr)
-push!(ROWS_W, outs(ROWS_G[end]))
-
-#Then AFC game, where the two highest ranked winners from games 2,3,5 play each other
-tr = []
-for ii in 1:length(ROWS_W[end])
-    coords = get_precs(10,ii)
-    A_wins = [ROWS_W[2][coords[2]],ROWS_W[3][coords[3]],ROWS_W[5][coords[5]]]
-    best_teams = partialsort!(A_wins,1:2)
-    push!(tr,best_teams)
-end
-push!(ROWS_G,tr)
-push!(ROWS_W, outs(ROWS_G[end]))
-
-
-# Conference Champs
-# NFC First - this will be winners of games 8 and 9
-tr = []
-for ii in 1:length(ROWS_W[end])
-    coords = get_precs(11,ii)
-    N_wins = [ROWS_W[8][coords[8]],ROWS_W[9][coords[9]]]
-    push!(tr,N_wins)
-end
-push!(ROWS_G,tr)
-push!(ROWS_W, outs(ROWS_G[end]))
-
-# Then AFC
-tr = []
-for ii in 1:length(ROWS_W[end])
-    coords = get_precs(12,ii)
-    A_wins = [ROWS_W[7][coords[7]],ROWS_W[10][coords[10]]]
-    push!(tr,A_wins)
-end
-push!(ROWS_G,tr)
-push!(ROWS_W, outs(ROWS_G[end]))
-
-
-#Superbowl
-# Then Superbowl - winners of games 11 and 12
-tr = []
-for ii in 1:length(ROWS_W[end])
-    coords = get_precs(13,ii)
-    S_wins = [ROWS_W[11][coords[11]],ROWS_W[12][coords[12]]]
-    push!(tr,S_wins)
-end
-push!(ROWS_G,tr)
-push!(ROWS_W, outs(ROWS_G[end]))
-
 
 
 ## Let's see how everyone scores across the bottom
