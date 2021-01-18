@@ -69,7 +69,12 @@ end
 
 function get_coords(idx)
     row = get_row(idx)
-    n_row_els = 
+    n_els = 2^(row-1)
+    ss = 1/n_els
+    ns = idx - n_els
+    col = ss/2 + ns * ss
+    # col = (idx - 2^(row-1) + 1)/(2^(row-1)+1)
+    return [row,col]
 end
 
 # GTREE will be big vector of games, linked structure is implied and does not need to be carried
@@ -107,9 +112,19 @@ end
 p = plot([0],[0], legend=false, xlims = [0,14], ylims = [0,1], xticks=:none, yticks=:none);
 
 #Write in the games
-annotate!(p, [(c[1],c[2],Plots.text(string(scr), 6, :center)) for (c,scr) in zip(get_coords.(1:length(GTREE)),GTREE)]);
+annotate!(p, [(c[1],c[2],Plots.text(string(scr), 6, :center)) for (c,scr) in zip(get_coords.(1:length(GTREE)),get_anno.(GTREE))]);
 
-# annotate!(p, [(x,y,Plots.text(string(scr), 6, :center)) for (x,y,scr) in zip(Xp,Yp,winning_scores)]);
+#SB winners
+annotate!(p, [(c[1],c[2],Plots.text(string(scr), 6, :center)) for (c,scr) in zip(get_coords.(1:length(GTREE)),get_anno.(GTREE))]);
+
+
+
+plot!(p, size=(2000,10000));
+savefig(p, "test.png");
+
+
+
+
 
 
 
