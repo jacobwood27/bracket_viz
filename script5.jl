@@ -128,6 +128,7 @@ function get_lr(idx)
     c
 end
 
+##TODO
 function get_t1_pw(t1::Team, t2::Team, l::Location; Δelo_home=0, Δelo_rest=0, Δelo_mult=1.0)
     A_elo_base = elo(t1)
     B_elo_base = elo(t2)
@@ -153,6 +154,7 @@ function get_game_prob(t1, t2, wk)
     t1_elo = TEAMS[t1][2]
     t2_elo = TEAMS[t2][2]
 
+    ##TODO
     if (wk==1) || (wk==2 && t1≠1 && t2≠11) || (wk==3) #Regular playoff games
         pw_t1 = get_pw_t1(t1, t2, l, Δelo_home=HOME_ADV, Δelo_mult=PLAYOFF_MULT)
     elseif week == 2 #Rest games for 1 seeds
