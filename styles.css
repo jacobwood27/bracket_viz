@@ -31,7 +31,7 @@ body {
     background-position: top center;
   }
 
-  @media screen and (max-width: 100px) {
+  @media screen and (max-width: 1000px) {
     body {
       background-image: none;
     }
