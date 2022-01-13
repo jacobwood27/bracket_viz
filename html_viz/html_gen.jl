@@ -1,4 +1,4 @@
-
+using JSON
 
 top = """
 <!DOCTYPE html>
@@ -24,6 +24,12 @@ bot = """
   var element = document.getElementById(id);
   element.classList.toggle("hide");
  }
+ document.addEventListener("DOMContentLoaded", function(){
+    cC("2");
+    cC("4");
+    cC("8");
+    cC("17");
+});
 </script>
 
 </html>
@@ -43,12 +49,14 @@ end
 left(i::Int) = i*2
 right(i::Int) = i*2 + 1
 
+BIG_DIC = JSON.parsefile("big_dic.json")
 
 
 
 
 function main_text(i::Int)
-    "DEN v LAC"
+    teams = BIG_DIC["main"]["$i"]
+    teams[1] * " v " * teams[2]
 end
 
 function right_tooltip(i::Int)
@@ -56,7 +64,9 @@ function right_tooltip(i::Int)
 end
 
 function left_tooltip(i::Int)
-    "Lefttext <br /> line2 - 1"
+    prob = Int(round(BIG_DIC["left"]["$i"] * 100))
+    teams = BIG_DIC["main"]["$i"]
+    "$(teams[1]): $prob%  <br /> $(teams[2]): $(100-prob)%"
 end
 
 

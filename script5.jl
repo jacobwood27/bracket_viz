@@ -65,16 +65,16 @@ TEAMS = Dict(
 SUPERBOWL_LOC = (38.632975, -90.188547)
 
 # What were the picks people made?
-# PICKS = [
-#     "Akhil" => [ "TB", "SEA",  "NO", "BAL", "PIT", "BUF",  "GB",  "NO",  "KC", "BUF",  "GB", "BUF", "BUF"],
-#     "Steve" => [ "TB", "SEA",  "NO", "TEN", "PIT", "BUF",  "GB",  "NO",  "KC", "BUF",  "GB", "BUF", "BUF"],
-#     "Dustin"=> [ "TB", "SEA",  "NO", "BAL", "PIT", "BUF",  "GB",  "NO",  "KC", "BUF",  "NO",  "KC",  "KC"],
-#     "Jacob" => [ "TB", "SEA",  "NO", "BAL", "PIT", "BUF",  "GB",  "NO",  "KC", "BUF",  "NO",  "KC",  "KC"],
-#     "David" => [ "TB", "LAR",  "NO", "TEN", "PIT", "BUF",  "GB",  "TB",  "KC", "BUF",  "GB", "BUF", "BUF"],
-#     "Eric"  => [ "TB", "SEA",  "NO", "BAL", "PIT", "BUF",  "TB",  "NO",  "KC", "BUF",  "NO",  "KC",  "KC"],
-#     "Mo"    => [ "TB", "LAR",  "NO", "BAL", "CLE", "BUF",  "GB",  "TB",  "KC", "BUF",  "GB",  "KC",  "KC"],
-#     "Ben"   => [ "TB", "SEA",  "NO", "BAL", "PIT", "BUF",  "TB",  "NO", "BAL", "BUF",  "NO", "BUF", "BUF"]
-# ]
+PICKS = [
+    # "Akhil" => [ "TB", "SEA",  "NO", "BAL", "PIT", "BUF",  "GB",  "NO",  "KC", "BUF",  "GB", "BUF", "BUF"],
+    ("Steve" , [ " KC", "BUF", "CIN", "LAR", " TB", "DAL", "CIN", "BUF", " GB", " TB", " GB", "CIN", "CIN"]),
+    ("Dustin", [ " KC", "DAL", "ARI", " LV", " TB", "BUF", " GB", "BUF", "TEN", " TB", "BUF", " GB", " GB"]),
+    ("Jacob" , [ " KC", "DAL", "LAR", "CIN", " TB", "BUF", " GB", " KC", "TEN", " TB", "TEN", " GB", " GB"]),
+    # "David" => [ "TB", "LAR",  "NO", "TEN", "PIT", "BUF",  "GB",  "TB",  "KC", "BUF",  "GB", "BUF", "BUF"],
+    # "Eric"  => [ "TB", "SEA",  "NO", "BAL", "PIT", "BUF",  "TB",  "NO",  "KC", "BUF",  "NO",  "KC",  "KC"],
+    # "Mo"    => [ "TB", "LAR",  "NO", "BAL", "CLE", "BUF",  "GB",  "TB",  "KC", "BUF",  "GB",  "KC",  "KC"],
+    # "Ben"   => [ "TB", "SEA",  "NO", "BAL", "PIT", "BUF",  "TB",  "NO", "BAL", "BUF",  "NO", "BUF", "BUF"]
+]
 
 # Who has played and won their games already?
 WINS = []
@@ -681,32 +681,97 @@ get_game_prob(11, 12, 3)
 # sum([OUTCOME_PROBS[i] for i in 1:2^13 if get_winners(i)[end]==7])
 
 
+# Get likelihood of outcomes given starting at game i - return a 2^13 vector with all outcomes (many of which may be 0)
+function get_pos_outcomes(i)
+    lb = 2*i
+    ub = 2*i+1
+    while lb < 2^13
+        lb = 2*lb
+        ub = 2*ub+1
+    end
+    lb = lb - (2^13-1)
+    ub = ub - (2^13-1)
 
+    lb, ub
+end
+
+function lower_outcome_probs(i)
+    lb, ub = get_pos_outcomes(i)
+    
+    p_out = zeros(Float64, 2^13)
+    p_out[lb:ub] = OUTCOME_PROBS[lb:ub]./sum(OUTCOME_PROBS[lb:ub])
+
+    p_out
+end
+
+REVERSE_DIC = Dict{String,Int}()
+for (k,v) in TEAMS
+    REVERSE_DIC[v[1]] = k
+end
+function get_pick_branch(pick)
+    picks = sort([REVERSE_DIC[p] for p in pick])
+
+    for i in 1:2^13
+        b = sort(get_winners(i))
+        if b == picks
+            return i
+        end
+    end
+    return 0
+end
+
+
+PICK_NUMS = [get_pick_branch(p[2]) for p in PICKS]
+function get_everyones_prob(i)
+    lb, ub = get_pos_outcomes(i)
+    outcome_probs = lower_outcome_probs(i)
+    
+    e_prob = zeros(length(PICK_NUMS))
+    for o in lb:ub
+        scores = [SCORE_MAT[p,o] for p in PICK_NUMS]
+        winners = findall(scores .== maximum(scores))
+        e_prob[winners] .+= outcome_probs[o]/length(winners)
+    end
+
+    e_prob
+end
+
+get_everyones_prob(4157)
 
 
 ## Make vis JSON dict to read in
+BIG_DIC = Dict()
+BIG_DIC["names"] = [p[1] for p in PICKS]
 
 main_text_dict = Dict()
 for (i,g) in enumerate(PLAYOFFS)
     main_text_dict[i] = (strip(TEAMS[g[1]][1]), strip(TEAMS[g[2]][1]))
 end
+BIG_DIC["main"] = main_text_dict
 
 left_text_dict = Dict()
 for (i,g) in enumerate(GAME_PROBS)
     left_text_dict[i] = g[1]
 end
+BIG_DIC["left"] = left_text_dict
 
+right_text_dict = Dict()
+for i in 1:2^13-1
+    all_probs = get_everyones_prob(i)
+    right_text_dict[i] = all_probs
+end
+BIG_DIC["right"] = right_text_dict
 
+scores_dic = Dict()
+for i in 1:2^13
+    scores = [SCORE_MAT[p,i] for p in PICK_NUMS]
+    scores_dic[i] = scores
+end
+BIG_DIC["scores"] = scores_dic
 
-
-
-
-
-
-stringdata = JSON.json(main_text_dict)
 # write the file with the stringdata variable information
-open("test.json", "w") do f
-    write(f, stringdata)
+open("big_dic.json", "w") do f
+    write(f, JSON.json(BIG_DIC))
 end
 
 read_back = JSON.parsefile("test.json")

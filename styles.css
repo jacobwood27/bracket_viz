@@ -1,6 +1,31 @@
 body {
     font-family: sans-serif;
     font-size: 15px;
+    background: linear-gradient(
+    #ffffff 0px,
+    #ffffff 10px,
+    #86E3CE 11px,
+    #86E3CE 386px,
+    #ffffff 387px,
+    #ffffff 397px,
+    #D0E6A5 398px,
+    #D0E6A5 643px,
+    #ffffff 644px,
+    #ffffff 654px,
+    #FFDD94 655px,
+    #FFDD94 771px,
+    #ffffff 772px,
+    #ffffff 782px,
+    #FA897B 783px,
+    #FA897B 835px,
+    #ffffff 836px,
+    #ffffff 846px,
+    #CCABD8 847px,
+    #CCABD8 1000px,
+    #ffffff 1001px
+    );
+    background-repeat: no-repeat;
+    min-height: 1000px;
   }
   
   .tree ul {
@@ -29,14 +54,14 @@ body {
     position: absolute;
     top: 0;
     right: 50%;
-    border-top: 1px solid #ccc;
+    border-top: 1px solid rgb(0, 0, 0);
     width: 51%;
     height: 1em;
   }
   .tree li::after {
     right: auto;
     left: 50%;
-    border-left: 1px solid #ccc;
+    border-left: 1px solid rgb(0, 0, 0);
   }
   .tree li:only-child::after, .tree li:only-child::before {
     display: none;
@@ -48,7 +73,7 @@ body {
     border: 0 none;
   }
   .tree li:last-child::before {
-    border-right: 1px solid #ccc;
+    border-right: 1px solid rgb(0, 0, 0);
     border-radius: 0 5px 0 0;
   }
   .tree li:first-child::after {
@@ -60,19 +85,20 @@ body {
     position: absolute;
     top: 0;
     left: 50%;
-    border-left: 1px solid #ccc;
+    border-left: 1px solid rgb(0, 0, 0);
     width: 0;
     height: 1em;
   }
   
   .tree li a {
-    border: 1px solid #ccc;
+    border: 1px solid rgb(0, 0, 0);
     padding: 0.5em 0.75em;
     text-decoration: none;
     display: inline-block;
     border-radius: 5px;
-    color: #333;
+    color: rgb(0, 0, 0);
     position: relative;
+    background-color: #ffffff;
     top: 1px;
   }
   
@@ -93,6 +119,8 @@ body {
   .tooltip {
     position: relative;
     display: inline-block;
+    cursor: pointer;
+    
     /* border-bottom: 1px dotted black; */
   }
 
@@ -117,7 +145,7 @@ body {
 
   .tooltip .tooltiptext2 {
     visibility: hidden;
-    background-color: rgb(255, 0, 255);
+    background-color: rgb(0, 14, 136);
     padding: 10px;
     color: #fff;
     text-align: right;
@@ -149,3 +177,4 @@ body {
     display: block;
     display: initial;
   }
+
