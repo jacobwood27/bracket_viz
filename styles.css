@@ -24,8 +24,11 @@ body {
     #CCABD8 1000px,
     #ffffff 1001px
     );
-    background-repeat: no-repeat;
+    background-repeat: repeat-x;
     min-height: 1000px;
+    width: 100vh;
+    background-size: cover;
+    background-position: top center;
   }
   
   .tree ul {
