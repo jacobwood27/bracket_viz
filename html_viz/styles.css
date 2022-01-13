@@ -78,69 +78,68 @@ body {
   
   .tree li a:hover,
   .tree li a:hover + ul li a {
-    background: #e9453f;
+    background: #058d3e;
     color: #fff;
-    border: 1px solid #e9453f;
+    border: 1px solid #058d3e;
   }
   
   .tree li a:hover + ul li::after,
   .tree li a:hover + ul li::before,
   .tree li a:hover + ul::before,
   .tree li a:hover + ul ul::before {
-    border-color: #e9453f;
+    border-color: #058d3e;
   }
 
   .tooltip {
     position: relative;
     display: inline-block;
-    border-bottom: 1px dotted black;
+    /* border-bottom: 1px dotted black; */
   }
 
-  .tooltipL {
-    position: relative;
-    display: inline-block;
-    border-bottom: 1px dotted black;
-  }
-  
   .tooltip .tooltiptext {
     visibility: hidden;
-    width: 120px;
-    background-color: black;
+    background-color: rgb(111, 0, 255);
+    padding: 10px;
     color: #fff;
-    text-align: center;
+    text-align: left;
     border-radius: 6px;
-    padding: 5px 0;
     
     /* Position the tooltip */
     position: absolute;
     z-index: 1;
-    top: -5px;
-    left: 105%;
-  }
-  
-  .tooltipL .tooltiptext {
-    visibility: hidden;
-    width: 120px;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-    
-    /* Position the tooltip */
-    position: absolute;
-    z-index: 1;
-    top: -5px;
-    right: 105%;
+    top: -10px;
+    left: 110%;
   }
 
   .tooltip:hover .tooltiptext {
     visibility: visible;
   }
 
-  .tooltipL:hover .tooltiptext {
+  .tooltip .tooltiptext2 {
+    visibility: hidden;
+    background-color: rgb(255, 0, 255);
+    padding: 10px;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    top: -10px;
+    right: 110%;
+  }
+
+  .tooltip:hover .tooltiptext2 {
     visibility: visible;
   }
+
+  .tooltip:hover span::after {
+    content: attr(data-title);
+ }
+.tooltip span:hover {
+    display: none;
+ }
 
   .hide{
     display:none;  

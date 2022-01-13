@@ -84,6 +84,7 @@ WINS = []
 using StatsBase
 using DelimitedFiles
 using Distributions
+using JSON
 
 function winner(game_i, round, T)
     while true
@@ -638,6 +639,25 @@ for (d,g) in zip(lr,branch)
     end
 end
 
+idxs = reverse(sortperm(ev))[1:3]
+for idx in idxs
+    println("Chance of winning: ", round(ev[idx]*100, digits=2), "%")
+    
+    lr = get_lr(idx)
+    branch = get_branch(lr)
+
+    println("Make these picks: ")
+    for (d,g) in zip(lr,branch)
+        t1 = TEAMS[PLAYOFFS[g][1]][1]
+        t2 = TEAMS[PLAYOFFS[g][2]][1]
+        if d 
+            println(t1, " ", Int(round(GAME_PROBS[g]*100)),"% over ", t2, " ", Int(round((1-GAME_PROBS[g])*100)), "%")
+        else
+            println(t2, " ", Int(round((1-GAME_PROBS[g])*100)), "% over ", t1, " ", Int(round(GAME_PROBS[g]*100)), "%")
+        end
+    end
+end
+
 
 
 get_game_prob(11, 12, 3)
@@ -659,3 +679,34 @@ get_game_prob(11, 12, 3)
 # 17 => ("PHI", 1508, (39.900775, -75.167453)),
 
 # sum([OUTCOME_PROBS[i] for i in 1:2^13 if get_winners(i)[end]==7])
+
+
+
+
+
+## Make vis JSON dict to read in
+
+main_text_dict = Dict()
+for (i,g) in enumerate(PLAYOFFS)
+    main_text_dict[i] = (strip(TEAMS[g[1]][1]), strip(TEAMS[g[2]][1]))
+end
+
+left_text_dict = Dict()
+for (i,g) in enumerate(GAME_PROBS)
+    left_text_dict[i] = g[1]
+end
+
+
+
+
+
+
+
+
+stringdata = JSON.json(main_text_dict)
+# write the file with the stringdata variable information
+open("test.json", "w") do f
+    write(f, stringdata)
+end
+
+read_back = JSON.parsefile("test.json")

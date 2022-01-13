@@ -43,14 +43,36 @@ end
 left(i::Int) = i*2
 right(i::Int) = i*2 + 1
 
+
+
+
+
+function main_text(i::Int)
+    "DEN v LAC"
+end
+
+function right_tooltip(i::Int)
+    "Testhover $i <br /> line2 - $i"
+end
+
+function left_tooltip(i::Int)
+    "Lefttext <br /> line2 - 1"
+end
+
+
+
+
 function add_lines!(v,i::Int)
     push!(v,"<li>")
-    push!(v,"<a onclick=\"cC('$i')\" class=\"tooltip\"> 
-               DEN 84% vs LAC 16%
-            <span class=\"tooltiptext\">
-                Testhover $i <br />
-                line2 - $i
-            </span> </a>")
+    push!(v,"<a onclick=\"cC('$i')\" class=\"tooltip\">")
+    push!(v, main_text(i))#DEN v LAC
+    push!(v, "<span class=\"tooltiptext\">")
+    push!(v, right_tooltip(i))#Testhover $i <br /> line2 - $i
+    push!(v, "</span>")
+    push!(v, "<span class=\"tooltiptext2\">")
+    push!(v, left_tooltip(i))#Lefttext <br /> line2 - 1
+    push!(v, "</span></a>")
+            
     if i > 1
         push!(v,"<ul id=\"$i\" class=\"hide\">")
     else
@@ -62,6 +84,7 @@ function add_lines!(v,i::Int)
     end
     push!(v,"</ul>")
     push!(v,"</li>")
+
 end
 
 
