@@ -6,7 +6,7 @@ top = """
 
 <head>
  <meta charset="utf-8">
- <title>My test page</title>
+ <title>Bracketry</title>
  <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -24,20 +24,6 @@ bot = """
   var element = document.getElementById(id);
   element.classList.toggle("hide");
  }
- document.addEventListener("DOMContentLoaded", function(){
-    cC("2");
-    cC("4");
-    cC("8");
-    cC("16");
-    cC("32");
-    cC("64");
-    cC("128");
-    cC("256");
-    cC("512");
-    cC("1024");
-    cC("2049");
-    cC("4098");
-});
 </script>
 
 </html>
@@ -104,13 +90,17 @@ function win_text(i::Int)
     s
 end
 
-
+GAMES = [1]
 
 function add_lines!(v, i::Int)
 
     if i < 2^13
         push!(v, "<li>")
-        push!(v, "<a onclick=\"cC('$i')\" class=\"tooltip\">")
+        if i in GAMES
+            push!(v, "<a onclick=\"cC('$i')\" class=\"tooltip locked\">")
+        else
+            push!(v, "<a onclick=\"cC('$i')\" class=\"tooltip\">")
+        end
         push!(v, main_text(i))#DEN v LAC
         push!(v, "<span class=\"tooltiptext\">")
         push!(v, right_tooltip(i))#Testhover $i <br /> line2 - $i

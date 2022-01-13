@@ -26,7 +26,6 @@ body {
     );
     background-repeat: repeat-x;
     min-height: 1000px;
-    width: 100vh;
     background-size: cover;
     background-position: top center;
   }
@@ -35,6 +34,11 @@ body {
     body {
       background-image: none;
     }
+  }
+
+  .tree {
+    display: flex;
+    justify-content: center;
   }
 
   .tree ul {
@@ -187,3 +191,7 @@ body {
     display: initial;
   }
 
+.tooltip.locked{
+    background-color: #000000;
+    color: #ffffff;
+}

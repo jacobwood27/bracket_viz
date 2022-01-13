@@ -5,16 +5,13 @@
  <meta charset="utf-8">
  <title>Bracketry</title>
  <link rel="stylesheet" href="styles.css">
- <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
-
-
 <body>
-<div class="tree">
+<div class="tree" style="width:800px; margin:0 auto;">
 <ul>
 <li>
-<a onclick="cC('1')" class="tooltip">
+<a onclick="cC('1')" class="tooltip locked" >
 KC v PIT
 <span class="tooltiptext">
 Jacob: 73% (76%, 54%) <br />Dustin: 17% (15%, 35%) <br />Steve: 10% (9%, 11%) <br />
@@ -22,7 +19,7 @@ Jacob: 73% (76%, 54%) <br />Dustin: 17% (15%, 35%) <br />Steve: 10% (9%, 11%) <b
 <span class="tooltiptext2">
 KC: 86%  <br /> PIT: 14%
 </span></a>
-<ul id="1">
+<ul id="1" >
 <li>
 <a onclick="cC('2')" class="tooltip">
 DAL v SF
@@ -155657,20 +155654,6 @@ Dustin: 2 <br />Steve: 0 <br />Jacob: 0 <br />
   var element = document.getElementById(id);
   element.classList.toggle("hide");
  }
- document.addEventListener("DOMContentLoaded", function(){
-    cC("2");
-    cC("4");
-    cC("8");
-    cC("16");
-    cC("32");
-    cC("64");
-    cC("128");
-    cC("256");
-    cC("512");
-    cC("1024");
-    cC("2049");
-    cC("4098");
-});
 </script>
 
 </html>
