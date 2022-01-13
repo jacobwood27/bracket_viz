@@ -30,7 +30,11 @@ body {
     background-size: cover;
     background-position: top center;
   }
-  
+
+html{
+      height: 100%;
+      width: 100%}   
+
   .tree ul {
     position: relative;
     padding: 1em 0;
