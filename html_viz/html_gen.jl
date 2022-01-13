@@ -45,7 +45,12 @@ right(i::Int) = i*2 + 1
 
 function add_lines!(v,i::Int)
     push!(v,"<li>")
-    push!(v,"<a onclick=\"cC('$i')\">$i</a>")
+    push!(v,"<a onclick=\"cC('$i')\" class=\"tooltip\"> 
+               DEN 84% vs LAC 16%
+            <span class=\"tooltiptext\">
+                Testhover $i <br />
+                line2 - $i
+            </span> </a>")
     if i > 1
         push!(v,"<ul id=\"$i\" class=\"hide\">")
     else
@@ -63,7 +68,7 @@ end
 mid_lines = String[]
 add_lines!(mid_lines,1)
 
-open("html_viz/index.html", "w") do file
+open("index.html", "w") do file
     write(file, top)
     [write(file, l * "\n") for l in mid_lines]
     write(file, bot)
