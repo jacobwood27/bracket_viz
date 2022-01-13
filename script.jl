@@ -620,8 +620,9 @@ Threads.@threads for p = 1:2^13
     end
     ev[p] = EV_win + EV_tie
 end
-writedlm("ev_02.csv",  ev, ',')
+writedlm("ev.csv",  ev, ',')
 plot(ev)
+
 
 println("Best chance of winning: ", round(maximum(ev)*100, digits=2), "%")
 idx = argmax(ev)
