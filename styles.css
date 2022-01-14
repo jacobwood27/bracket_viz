@@ -3,30 +3,20 @@ body {
     font-family: sans-serif;
     font-size: 15px;
     background: linear-gradient(
-    #ffffff 0em,
-    #ffffff 0.5em,
-    #86E3CE 0.51em,
-    #86E3CE 23.5em,
-    #ffffff 23.501em,
-    #ffffff 24.5em,
-    #D0E6A5 24.501em,
-    #D0E6A5 39.5em,
-    #ffffff 39.501em,
-    #ffffff 40.5em,
-    #FFDD94 40.501em,
-    #FFDD94 47.5em,
-    #ffffff 47.501em,
-    #ffffff 48.5em,
-    #FA897B 48.501em,
-    #FA897B 51.5em,
-    #ffffff 51.501em,
-    #ffffff 52.5em,
-    #CCABD8 52.501em,
-    #CCABD8 100em
+    #86E3CE 0px,
+    #86E3CE 277px,
+    #D0E6A5 278px,
+    #D0E6A5 457px,
+    #FFDD94 458px,
+    #FFDD94 547px,
+    #FA897B 548px,
+    #FA897B 592px,
+    #CCABD8 593px,
+    #CCABD8 2000px
     );
     min-height: 100vh;
     /* height: 100%; */
-    background-size: auto;
+    /* background-size: auto; */
     /* background-position: top center; */
     /* min-height: 100%; */
     background-repeat: repeat-x;
@@ -48,7 +38,7 @@ body {
 
   .tree ul {
     position: relative;
-    padding: 1em 0;
+    padding: 1em 0 0 0;
     white-space: nowrap;
     margin: 0 auto;
     text-align: center;
@@ -65,16 +55,17 @@ body {
     text-align: center;
     list-style-type: none;
     position: relative;
-    padding: 1em 0.5em 0 0.5em;
+    padding: 0em 0.5em 0 0.5em;
   }
   .tree li::before, .tree li::after {
     content: "";
     position: absolute;
-    top: 0;
+    top: -2em;
     right: 50%;
     border-top: 1px solid rgb(0, 0, 0);
     width: 51%;
-    height: 1em;
+    height: 3em;
+    z-index: -1;
   }
   .tree li::after {
     right: auto;
@@ -103,7 +94,7 @@ body {
     position: absolute;
     top: 0;
     left: 50%;
-    border-left: 1px solid rgb(0, 0, 0);
+    /* border-left: 1px solid rgb(0, 0, 0); */
     /* border-right: 1px solid rgb(0, 0, 0); */
     /* border-bottom: 3px solid rgb(255, 255, 255); */
     width: 20%;
@@ -113,22 +104,22 @@ body {
 
   
   .tree li a {
-    border: 1px solid rgb(0, 0, 0);
-    padding: 0.5em 0.75em;
+    /* border: 1px solid rgb(0, 0, 0); */
+    padding: 0.5em 0.5em;
+    line-height: 1.0;
     text-decoration: none;
     display: inline-block;
     border-radius: 5px;
     color: rgb(0, 0, 0);
     position: relative;
     background-color: #ffffff;
-    top: 1px;
   }
   
   .tree li a:hover,
   .tree li a:hover + ul li a {
     background: #058d3e;
     color: #fff;
-    border: 1px solid #058d3e;
+    /* border: 1px solid #058d3e; */
   }
   
   .tree li a:hover + ul li::after,
