@@ -66,9 +66,9 @@ SUPERBOWL_LOC = (38.632975, -90.188547)
 
 # What were the picks people made?
 PICKS = [
-    # "Akhil" => [ "TB", "SEA",  "NO", "BAL", "PIT", "BUF",  "GB",  "NO",  "KC", "BUF",  "GB", "BUF", "BUF"],
-    ("Steve" , [ " KC", "BUF", "CIN", "LAR", " TB", "DAL", "CIN", "BUF", " GB", " TB", " GB", "CIN", "CIN"]),
-    ("Dustin", [ " KC", "DAL", "ARI", " LV", " TB", "BUF", " GB", "BUF", "TEN", " TB", "BUF", " GB", " GB"]),
+    ("Akhil" , [ " TB", " SF",  "LAR", "CIN", "BUF", " KC",  "TEN",  " KC",  " TB", " GB",  " GB", "TEN", "TEN"]),
+    # ("Steve" , [ " KC", "BUF", "CIN", "LAR", " TB", "DAL", "CIN", "BUF", " GB", " TB", " GB", "CIN", "CIN"]),
+    # ("Dustin", [ " KC", "DAL", "ARI", " LV", " TB", "BUF", " GB", "BUF", "TEN", " TB", "BUF", " GB", " GB"]),
     ("Jacob" , [ " KC", "DAL", "LAR", "CIN", " TB", "BUF", " GB", " KC", "TEN", " TB", "TEN", " GB", " GB"]),
     # "David" => [ "TB", "LAR",  "NO", "TEN", "PIT", "BUF",  "GB",  "TB",  "KC", "BUF",  "GB", "BUF", "BUF"],
     # "Eric"  => [ "TB", "SEA",  "NO", "BAL", "PIT", "BUF",  "TB",  "NO",  "KC", "BUF",  "NO",  "KC",  "KC"],
@@ -775,4 +775,15 @@ open("big_dic.json", "w") do f
     write(f, JSON.json(BIG_DIC))
 end
 
-read_back = JSON.parsefile("test.json")
+# read_back = JSON.parsefile("test.json")
+
+
+
+
+
+
+AK_PROBS = PICK_PROBS[3]
+AK_PICK = 2049
+AK_PROBS[AK_PICK]
+idx_sort = sortperm(AK_PROBS, rev=true)
+idx_sort[AK_PICK]
