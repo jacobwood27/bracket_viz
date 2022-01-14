@@ -1,34 +1,39 @@
 body {
+    margin: 0;
     font-family: sans-serif;
     font-size: 15px;
     background: linear-gradient(
-    #ffffff 0px,
-    #ffffff 10px,
-    #86E3CE 11px,
-    #86E3CE 386px,
-    #ffffff 387px,
-    #ffffff 397px,
-    #D0E6A5 398px,
-    #D0E6A5 643px,
-    #ffffff 644px,
-    #ffffff 654px,
-    #FFDD94 655px,
-    #FFDD94 771px,
-    #ffffff 772px,
-    #ffffff 782px,
-    #FA897B 783px,
-    #FA897B 835px,
-    #ffffff 836px,
-    #ffffff 846px,
-    #CCABD8 847px,
-    #CCABD8 1000px,
-    #ffffff 1001px
+    #ffffff 0em,
+    #ffffff 0.5em,
+    #86E3CE 0.51em,
+    #86E3CE 23.5em,
+    #ffffff 23.501em,
+    #ffffff 24.5em,
+    #D0E6A5 24.501em,
+    #D0E6A5 39.5em,
+    #ffffff 39.501em,
+    #ffffff 40.5em,
+    #FFDD94 40.501em,
+    #FFDD94 47.5em,
+    #ffffff 47.501em,
+    #ffffff 48.5em,
+    #FA897B 48.501em,
+    #FA897B 51.5em,
+    #ffffff 51.501em,
+    #ffffff 52.5em,
+    #CCABD8 52.501em,
+    #CCABD8 100em
     );
+    min-height: 100vh;
+    /* height: 100%; */
+    background-size: auto;
+    /* background-position: top center; */
+    /* min-height: 100%; */
     background-repeat: repeat-x;
-    min-height: 1000px;
-    background-size: cover;
-    background-position: top center;
+    background-attachment: scroll;
+    /* overflow-y: hidden; */
   }
+
 
   @media screen and (max-width: 1000px) {
     body {
@@ -99,9 +104,13 @@ body {
     top: 0;
     left: 50%;
     border-left: 1px solid rgb(0, 0, 0);
-    width: 0;
+    /* border-right: 1px solid rgb(0, 0, 0); */
+    /* border-bottom: 3px solid rgb(255, 255, 255); */
+    width: 20%;
     height: 1em;
+    /* z-index: 10; */
   }
+
   
   .tree li a {
     border: 1px solid rgb(0, 0, 0);
