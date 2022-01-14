@@ -1,6 +1,6 @@
 using JSON
 
-top = """
+top1 = """
 <!DOCTYPE html>
 <html>
 
@@ -11,6 +11,43 @@ top = """
 </head>
 
 <body>
+
+<div class="tree", style="position:absolute; z-index:10;">
+<ul>
+    <li>
+        <a class="tooltip">
+            PICKS
+            <span class="tabletext">
+                <table>
+                    <tr>
+                      <th></th>
+                      <th>NW1</th>
+                      <th>NW2</th>
+                      <th>NW3</th>
+                      <th>AW1</th>
+                      <th>AW2</th>
+                      <th>AW3</th>
+                      <th>ND1</th>
+                      <th>ND2</th>
+                      <th>AD1</th>
+                      <th>AD2</th>
+                      <th>NFC</th>
+                      <th>AFC</th>
+                      <th>SB</th>
+                      <th>PTS</th>
+                      <th>EVP</th>
+                      <th>MAX</th>
+                    </tr>
+"""
+
+top2 = """
+                  </table>
+            </span>
+        </a>
+    </li>
+</ul>
+</div>
+
 <div class="tree">
 <ul>
 """
@@ -46,7 +83,29 @@ right(i::Int) = i * 2 + 1
 BIG_DIC = JSON.parsefile("big_dic.json")
 
 
+function get_table_lines()
+    picks = BIG_DIC["picks"]
 
+    tl = []
+    for pick in picks
+        push!(tl, "<tr>")
+
+        name = pick[1]
+        push!(tl, "<td>$name</td>")
+
+        for p in pick[2]
+            push!(tl, "<td>$p</td>")
+        end
+
+        #PTS 
+        #EVP
+        #MAX
+
+        push!(tl, "</tr>")
+    end
+
+    tl
+end
 
 function main_text(i::Int)
     teams = BIG_DIC["main"]["$i"]
@@ -129,12 +188,15 @@ function add_lines!(v, i::Int)
 
 end
 
+table_lines = get_table_lines()
 
 mid_lines = String[]
 add_lines!(mid_lines, 1)
 
 open("index.html", "w") do file
-    write(file, top)
+    write(file, top1)
+    [write(file, l * "\n") for l in table_lines]
+    write(file, top2)
     [write(file, l * "\n") for l in mid_lines]
     write(file, bot)
 end

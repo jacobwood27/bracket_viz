@@ -32,7 +32,7 @@ body {
   } */
 
   .tree {
-    display: flex;
+    /* display: flex; */
     justify-content: center;
   }
 
@@ -42,6 +42,7 @@ body {
     white-space: nowrap;
     margin: 0 auto;
     text-align: center;
+
   }
   .tree ul::after {
     content: "";
@@ -113,6 +114,7 @@ body {
     color: rgb(0, 0, 0);
     position: relative;
     background-color: #ffffff;
+    box-shadow:0 0 0 1px black inset;
   }
   
   .tree li a:hover,
@@ -133,7 +135,7 @@ body {
     position: relative;
     display: inline-block;
     cursor: pointer;
-    
+    /* z-index: 1; */
     /* border-bottom: 1px dotted black; */
   }
 
@@ -147,7 +149,7 @@ body {
     
     /* Position the tooltip */
     position: absolute;
-    z-index: 1;
+    z-index: 50;
     top: -10px;
     left: 110%;
   }
@@ -166,7 +168,7 @@ body {
     
     /* Position the tooltip */
     position: absolute;
-    z-index: 1;
+    z-index: 5;
     top: -10px;
     right: 110%;
   }
@@ -194,4 +196,48 @@ body {
 .tooltip.locked{
     background-color: #000000;
     color: #ffffff;
+}
+
+.tooltip .tabletext {
+    visibility: hidden;
+    background-color: rgb(255, 255, 255);
+    padding: 2px;
+    color: rgb(0, 0, 0);
+    text-align: left;
+    border-radius: 2px;
+    
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 2;
+    top: -10px;
+    left: 110%;
+  }
+  .tooltip:hover .tabletext {
+    visibility: visible;
+  }
+
+
+  table {
+    border-collapse: collapse;
+}
+
+  th, td {
+    width: 25%;
+    text-align: center;
+    vertical-align: top;
+    border: thin solid #000;
+    border-spacing: 0;
+    padding: 3px 3px;
+}
+
+table tbody tr:nth-of-type(even) {
+    background-color: #e0e0e0;
+}
+
+
+  table td.wrong {
+      color: red;
+  }
+  table td.right {
+    color: green;
 }

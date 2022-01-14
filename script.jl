@@ -45,19 +45,19 @@ WINS = ["BUF", "LAR", "TB", "BAL", "NO", "CLE", "GB", "BUF", "KC", "TB"]
 # Who made it to playoffs, and how good are they?
 TEAMS = Dict(
     1  => ("TEN", 1590, (36.166461, -86.771289)),
-    2  => (" KC", 1689, (39.048914, -94.484039)),
+    2  => ( "KC", 1689, (39.048914, -94.484039)),
     3  => ("BUF", 1637, (42.773739, -78.786978)),
     4  => ("CIN", 1570, (39.095442, -84.516039)),
-    5  => (" LV", 1480, (37.751411,-122.200889)),
-    6  => (" NE", 1571, (42.090925, -71.264350)),
+    5  => ( "LV", 1480, (37.751411,-122.200889)),
+    6  => ( "NE", 1571, (42.090925, -71.264350)),
     7  => ("PIT", 1486, (40.446786, -80.015761)),
 
-    11 => (" GB", 1680, (44.501306, -88.062167)),
-    12 => (" TB", 1654, (27.975967, -82.503350)),
+    11 => ( "GB", 1680, (44.501306, -88.062167)),
+    12 => ( "TB", 1654, (27.975967, -82.503350)),
     13 => ("DAL", 1636, (32.747778, -97.092778)),
     14 => ("LAR", 1591, (38.632975, -90.188547)),
     15 => ("ARI", 1523, (33.527700,-112.262608)),
-    16 => (" SF", 1580, (37.713486,-122.386256)),
+    16 => ( "SF", 1580, (37.713486,-122.386256)),
     17 => ("PHI", 1508, (39.900775, -75.167453)),
 )
 
@@ -66,10 +66,10 @@ SUPERBOWL_LOC = (38.632975, -90.188547)
 
 # What were the picks people made?
 PICKS = [
-    ("Akhil" , [ " TB", " SF",  "LAR", "CIN", "BUF", " KC",  "TEN",  " KC",  " TB", " GB",  " GB", "TEN", "TEN"]),
+    ("Akhil" , [ "TB", "SF",  "LAR", "CIN", "BUF", "KC",  "TEN",  "KC",  "TB", "GB",  "GB", "TEN", "TEN"]),
     # ("Steve" , [ " KC", "BUF", "CIN", "LAR", " TB", "DAL", "CIN", "BUF", " GB", " TB", " GB", "CIN", "CIN"]),
     # ("Dustin", [ " KC", "DAL", "ARI", " LV", " TB", "BUF", " GB", "BUF", "TEN", " TB", "BUF", " GB", " GB"]),
-    ("Jacob" , [ " KC", "DAL", "LAR", "CIN", " TB", "BUF", " GB", " KC", "TEN", " TB", "TEN", " GB", " GB"]),
+    ("Jacob" , [ "KC", "DAL", "LAR", "CIN", "TB", "BUF", "GB", "KC", "TEN", "TB", "TEN", "GB", "GB"]),
     # "David" => [ "TB", "LAR",  "NO", "TEN", "PIT", "BUF",  "GB",  "TB",  "KC", "BUF",  "GB", "BUF", "BUF"],
     # "Eric"  => [ "TB", "SEA",  "NO", "BAL", "PIT", "BUF",  "TB",  "NO",  "KC", "BUF",  "NO",  "KC",  "KC"],
     # "Mo"    => [ "TB", "LAR",  "NO", "BAL", "CLE", "BUF",  "GB",  "TB",  "KC", "BUF",  "GB",  "KC",  "KC"],
@@ -102,44 +102,62 @@ end
 
 function get_teams(game_i, T)
     if     game_i < 2^1
-        return (2,7)
-
-    elseif game_i < 2^2
-        return (13,16)
-
-    elseif game_i < 2^3
-        return (14,15)
-
-    elseif game_i < 2^4
+        # return (2,7)
         return (4,5)
 
-    elseif game_i < 2^5
-        return (12,17)
-
-    elseif game_i < 2^6
+    elseif game_i < 2^2
+        # return (13,16)
         return (3,6)
 
+    elseif game_i < 2^3
+        # return (14,15)
+        return (12,17)
+
+    elseif game_i < 2^4
+        # return (4,5)
+        return (13,16)
+
+    elseif game_i < 2^5
+        # return (12,17)
+        return (2,7)
+
+    elseif game_i < 2^6
+        # return (3,6)
+        return (14,15)
+
     elseif game_i < 2^7
-        opp = maximum([winner(game_i,rnd,T) for rnd in [2,3,5]])
+        # opp = maximum([winner(game_i,rnd,T) for rnd in [2,3,5]])
+        # return (11,opp)
+        opp = maximum([winner(game_i,rnd,T) for rnd in [3,4,6]])
         return (11,opp)
 
     elseif game_i < 2^8
-        tms = sort([winner(game_i,rnd,T) for rnd in [1,4,6]])
+        # tms = sort([winner(game_i,rnd,T) for rnd in [1,4,6]])
+        # return (tms[1],tms[2])
+        tms = sort([winner(game_i,rnd,T) for rnd in [1,2,5]])
         return (tms[1],tms[2])
     
     elseif game_i < 2^9
-        opp = maximum([winner(game_i,rnd,T) for rnd in [1,4,6]])
+        # opp = maximum([winner(game_i,rnd,T) for rnd in [1,4,6]])
+        # return (1,opp)
+        opp = maximum([winner(game_i,rnd,T) for rnd in [1,2,5]])
         return (1,opp)
     
     elseif game_i < 2^10
-        tms = sort([winner(game_i,rnd,T) for rnd in [2,3,5]])
+        # tms = sort([winner(game_i,rnd,T) for rnd in [2,3,5]])
+        # return (tms[1],tms[2])
+        tms = sort([winner(game_i,rnd,T) for rnd in [3,4,6]])
         return (tms[1],tms[2])
 
     elseif game_i < 2^11
+        # tms = sort([winner(game_i,rnd,T) for rnd in [8,9]])
+        # return (tms[1],tms[2])
         tms = sort([winner(game_i,rnd,T) for rnd in [8,9]])
         return (tms[1],tms[2])
 
     elseif game_i < 2^12
+        # tms = sort([winner(game_i,rnd,T) for rnd in [7,10]])
+        # return (tms[1],tms[2])
         tms = sort([winner(game_i,rnd,T) for rnd in [7,10]])
         return (tms[1],tms[2])
 
@@ -350,14 +368,12 @@ function get_score_mat()
                 score_mat[i,j] = score
             end
         end
-
-        # writedlm( "score_matrix.csv",  score_mat, ',')
     end
     score_mat
 end
 
 SCORE_MAT = get_score_mat()
-
+# writedlm( "score_matrix.csv",  SCORE_MAT, ',')
 
 
 
@@ -737,39 +753,48 @@ function get_everyones_prob(i)
     e_prob
 end
 
-get_everyones_prob(4157)
+get_everyones_prob(1)
 
 
 ## Make vis JSON dict to read in
-BIG_DIC = Dict()
-BIG_DIC["names"] = [p[1] for p in PICKS]
+function make_big_dic()
+    BIG_DIC = Dict()
+    BIG_DIC["names"] = [p[1] for p in PICKS]
 
-main_text_dict = Dict()
-for (i,g) in enumerate(PLAYOFFS)
-    main_text_dict[i] = (strip(TEAMS[g[1]][1]), strip(TEAMS[g[2]][1]))
+    main_text_dict = Dict()
+    for (i,g) in enumerate(PLAYOFFS)
+        main_text_dict[i] = (TEAMS[g[1]][1], TEAMS[g[2]][1])
+    end
+    BIG_DIC["main"] = main_text_dict
+
+    left_text_dict = Dict()
+    for (i,g) in enumerate(GAME_PROBS)
+        left_text_dict[i] = g[1]
+    end
+    BIG_DIC["left"] = left_text_dict
+
+    right_text_dict = Dict()
+    for i in 1:2^13-1
+        all_probs = get_everyones_prob(i)
+        right_text_dict[i] = all_probs
+    end
+    BIG_DIC["right"] = right_text_dict
+
+    scores_dic = Dict()
+    for i in 1:2^13
+        scores = [SCORE_MAT[p,i] for p in PICK_NUMS]
+        scores_dic[i] = scores
+    end
+    BIG_DIC["scores"] = scores_dic
+
+    BIG_DIC["picks"] = PICKS
+
+    BIG_DIC["sofar"] = ["TB", "SF"]
+
+    BIG_DIC
 end
-BIG_DIC["main"] = main_text_dict
 
-left_text_dict = Dict()
-for (i,g) in enumerate(GAME_PROBS)
-    left_text_dict[i] = g[1]
-end
-BIG_DIC["left"] = left_text_dict
-
-right_text_dict = Dict()
-for i in 1:2^13-1
-    all_probs = get_everyones_prob(i)
-    right_text_dict[i] = all_probs
-end
-BIG_DIC["right"] = right_text_dict
-
-scores_dic = Dict()
-for i in 1:2^13
-    scores = [SCORE_MAT[p,i] for p in PICK_NUMS]
-    scores_dic[i] = scores
-end
-BIG_DIC["scores"] = scores_dic
-
+BIG_DIC = make_big_dic()
 # write the file with the stringdata variable information
 open("big_dic.json", "w") do f
     write(f, JSON.json(BIG_DIC))
@@ -785,5 +810,6 @@ end
 AK_PROBS = PICK_PROBS[3]
 AK_PICK = 2049
 AK_PROBS[AK_PICK]
+count(AK_PROBS.>AK_PROBS[AK_PICK])
 idx_sort = sortperm(AK_PROBS, rev=true)
 idx_sort[AK_PICK]
