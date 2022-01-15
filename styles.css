@@ -58,13 +58,32 @@ body {
     position: relative;
     padding: 0em 0.5em 0 0.5em;
   }
-  .tree li::before, .tree li::after {
+  /* .tree li::before, .tree li::after {
+    content: "";
+    position: absolute;
+    top: -2em;
+    right: 50%;
+    border-top: 10px solid rgb(0, 0, 0);
+    width: 51%;
+    height: 3em;
+    z-index: -1;
+  } */
+  .tree li.pp::before, .tree li.pp::after {
     content: "";
     position: absolute;
     top: -2em;
     right: 50%;
     border-top: 1px solid rgb(0, 0, 0);
     width: 51%;
+    height: 3em;
+    z-index: -1;
+  }
+  .tree li.p::before, .tree li.p::after {
+    content: "";
+    position: absolute;
+    top: -2em;
+    right: 50%;
+    border-left: 1px solid rgb(0, 0, 0);
     height: 3em;
     z-index: -1;
   }
@@ -119,17 +138,17 @@ body {
   
   .tree li a:hover,
   .tree li a:hover + ul li a {
-    background: #058d3e;
+    background: #85dad5;
     color: #fff;
     /* border: 1px solid #058d3e; */
   }
   
-  .tree li a:hover + ul li::after,
+  /* .tree li a:hover + ul li::after,
   .tree li a:hover + ul li::before,
   .tree li a:hover + ul::before,
   .tree li a:hover + ul ul::before {
-    border-color: #058d3e;
-  }
+    border-color: #85dad5;
+  } */
 
   .tooltip {
     position: relative;
@@ -139,7 +158,7 @@ body {
     /* border-bottom: 1px dotted black; */
   }
 
-  .tooltip .tooltiptext {
+  .tooltip .righttt {
     visibility: hidden;
     background-color: rgb(111, 0, 255);
     padding: 10px;
@@ -154,11 +173,11 @@ body {
     left: 110%;
   }
 
-  .tooltip:hover .tooltiptext {
+  .tooltip:hover .righttt {
     visibility: visible;
   }
 
-  .tooltip .tooltiptext2 {
+  .tooltip .lefttt {
     visibility: hidden;
     background-color: rgb(0, 14, 136);
     padding: 10px;
@@ -173,7 +192,7 @@ body {
     right: 110%;
   }
 
-  .tooltip:hover .tooltiptext2 {
+  .tooltip:hover .lefttt {
     visibility: visible;
   }
 
@@ -192,6 +211,10 @@ body {
     display: block;
     display: initial;
   }
+
+li.hide{
+  display:none;
+}
 
 .tooltip.locked{
     background-color: #000000;
@@ -240,4 +263,8 @@ table tbody tr:nth-of-type(even) {
   }
   table td.right {
     color: green;
+}
+
+.green {
+  color: green;
 }

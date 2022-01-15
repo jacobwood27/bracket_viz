@@ -66,14 +66,17 @@ SUPERBOWL_LOC = (38.632975, -90.188547)
 
 # What were the picks people made?
 PICKS = [
-    ("Akhil" , [ "TB", "SF",  "LAR", "CIN", "BUF", "KC",  "TEN",  "KC",  "TB", "GB",  "GB", "TEN", "TEN"]),
-    # ("Steve" , [ " KC", "BUF", "CIN", "LAR", " TB", "DAL", "CIN", "BUF", " GB", " TB", " GB", "CIN", "CIN"]),
-    # ("Dustin", [ " KC", "DAL", "ARI", " LV", " TB", "BUF", " GB", "BUF", "TEN", " TB", "BUF", " GB", " GB"]),
-    ("Jacob" , [ "KC", "DAL", "LAR", "CIN", "TB", "BUF", "GB", "KC", "TEN", "TB", "TEN", "GB", "GB"]),
-    # "David" => [ "TB", "LAR",  "NO", "TEN", "PIT", "BUF",  "GB",  "TB",  "KC", "BUF",  "GB", "BUF", "BUF"],
-    # "Eric"  => [ "TB", "SEA",  "NO", "BAL", "PIT", "BUF",  "TB",  "NO",  "KC", "BUF",  "NO",  "KC",  "KC"],
-    # "Mo"    => [ "TB", "LAR",  "NO", "BAL", "CLE", "BUF",  "GB",  "TB",  "KC", "BUF",  "GB",  "KC",  "KC"],
-    # "Ben"   => [ "TB", "SEA",  "NO", "BAL", "PIT", "BUF",  "TB",  "NO", "BAL", "BUF",  "NO", "BUF", "BUF"]
+    ("Akhil" , [ "TB", "SF", "LAR", "KC", "BUF", "CIN",  "GB",  "TB", "TEN",  "KC", "GB", "TEN", "TEN"]),
+    ("Steve" , [ "TB", "SF", "LAR", "KC", "BUF", "CIN",  "GB",  "TB", "CIN", "BUF", "GB", "BUF",  "GB"]),
+    ("Dustin", [ "TB", "SF", "ARI", "KC", "BUF", "CIN",  "GB", "ARI", "TEN",  "KC", "GB",  "KC",  "GB"]),
+    ("Jacob" , [ "TB","DAL", "LAR", "KC", "BUF", "CIN",  "GB",  "TB", "TEN",  "KC", "GB", "TEN",  "GB"]),
+    ("Ben"   , [ "TB","DAL", "LAR", "KC", "BUF", "CIN",  "GB", "DAL", "TEN", "BUF", "GB", "TEN",  "GB"]),
+    ("Eric"  , [ "TB","DAL", "LAR", "KC", "BUF", "CIN",  "GB", "DAL", "CIN", "BUF", "GB", "BUF", "BUF"]),
+    ("Mo"    , [ "TB","DAL", "LAR", "KC",  "NE", "CIN",  "GB",  "TB", "TEN",  "KC", "GB",  "KC",  "KC"]),
+    ("Drew"  , [ "TB","DAL", "ARI", "KC",  "NE",  "LV",  "GB",  "TB",  "NE",  "KC", "TB",  "KC",  "KC"]),
+    ("David" , [ "TB", "SF", "LAR", "KC", "BUF", "CIN",  "GB", "LAR", "TEN", "BUF","LAR", "BUF", "BUF"]),
+    ("Sean"  , [ "TB","DAL", "LAR", "KC", "BUF",  "LV",  "GB",  "TB", "TEN", "BUF", "GB", "TEN",  "GB"]),
+    ("Guim"  , [ "TB", "SF", "LAR", "KC", "BUF", "CIN",  "GB", "LAR", "TEN", "BUF", "GB", "BUF",  "GB"]),
 ]
 
 # Who has played and won their games already?
@@ -805,7 +808,7 @@ end
 
 
 
-
+PICK_NUMS
 
 AK_PROBS = PICK_PROBS[3]
 AK_PICK = 2049
@@ -813,3 +816,15 @@ AK_PROBS[AK_PICK]
 count(AK_PROBS.>AK_PROBS[AK_PICK])
 idx_sort = sortperm(AK_PROBS, rev=true)
 idx_sort[AK_PICK]
+
+
+pick_nums = [1,2,3,5,6,7,9,10]
+pred_nums = [3,7,2,5,6,1,4,9]
+
+println("Name", " ", "bracket_rank", " ", "bracket_prob", " ")
+for (pick,prob) in zip(PICKS[pick_nums], PICK_PROBS[pred_nums])
+    num = get_pick_branch(pick[2])
+    branch_rank = count(prob.>prob[num])
+    branch_prob = prob[num]
+    println(pick[1], ": ", branch_rank, " ", branch_prob*100, " ", num)
+end

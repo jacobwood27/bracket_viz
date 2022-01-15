@@ -57,10 +57,36 @@ bot = """
 </body>
 
 <script type="text/javascript">
- function cC(id) {
-  var element = document.getElementById(id);
-  element.classList.toggle("hide");
- }
+    function cC(id, id2) {
+        var e2 = document.getElementById(id2);
+        e2.classList.toggle("green");
+        var e = document.getElementById(id);
+        e.classList.toggle("hide");
+        var sibs = e.parentElement.childNodes;
+        var hidden_sibs = 0;
+        for (index = 0; index < sibs.length; index++) {
+            if (sibs[index].tagName == 'LI') {
+                if (sibs[index].classList.contains("hide")) {
+                    hidden_sibs++
+                }
+            }
+        }
+        if (hidden_sibs == 0) {
+            for (index = 0; index < sibs.length; index++) {
+                if (sibs[index].tagName == 'LI') {
+                    sibs[index].classList.add("pp");
+                    sibs[index].classList.remove("p");
+                }
+            }
+        } else {
+            for (index = 0; index < sibs.length; index++) {
+                if (sibs[index].tagName == 'LI') {
+                    sibs[index].classList.remove("pp");
+                    sibs[index].classList.add("p");
+                }
+            }
+        }
+    }
 </script>
 
 </html>
@@ -107,11 +133,6 @@ function get_table_lines()
     tl
 end
 
-function main_text(i::Int)
-    teams = BIG_DIC["main"]["$i"]
-    teams[1] * " v " * teams[2]
-end
-
 NAMES = BIG_DIC["names"]
 function right_tooltip(i::Int)
     s = ""
@@ -153,38 +174,50 @@ GAMES = [1]
 
 function add_lines!(v, i::Int)
 
-    if i < 2^13
-        push!(v, "<li>")
-        if i in GAMES
-            push!(v, "<a onclick=\"cC('$i')\" class=\"tooltip locked\">")
-        else
-            push!(v, "<a onclick=\"cC('$i')\" class=\"tooltip\">")
-        end
-        push!(v, main_text(i))#DEN v LAC
-        push!(v, "<span class=\"tooltiptext\">")
-        push!(v, right_tooltip(i))#Testhover $i <br /> line2 - $i
-        push!(v, "</span>")
-        push!(v, "<span class=\"tooltiptext2\">")
-        push!(v, left_tooltip(i))#Lefttext <br /> line2 - 1
-        push!(v, "</span></a>")
+    
+    if i == 1
+        push!(v, "<li id=\"$i\">")
     else
-        push!(v, "<li>")
+        push!(v, "<li id=\"$i\" class=\"hide\">")
+    end
+
+    if i < 2^13
+        # if i in GAMES
+        #     push!(v, "<a onclick=\"cC('$i')\" class=\"tooltip locked\">")
+        # else
+        #     push!(v, "<a onclick=\"cC('$i')\" class=\"tooltip\">")
+        # end
+        teams = BIG_DIC["main"]["$i"]
+        push!(v, """
+        <a class="tooltip">
+            <b onclick="cC('$(left(i))', '$(i)L')" id="$(i)L">$(teams[1])</b> v <b onclick="cC('$(right(i))', '$(i)R')" id="$(i)R">$(teams[2])</b>
+            <span class=\"righttt\">$(right_tooltip(i))</span>
+            <span class=\"lefttt\">$(left_tooltip(i))</span>
+        </a>
+        """)
+    else
         push!(v, "<a>")
         push!(v, win_text(i))#DEN v LAC
         push!(v, "</a>")
     end
 
-    if i > 1
-        push!(v, "<ul id=\"$i\" class=\"hide\">")
-    else
-        push!(v, "<ul id=\"$i\">")
-    end
+    
+    # if i > 1
+    #     push!(v, "<ul id=\"$i\" class=\"hide\">")
+    # else
+    #     push!(v, "<ul id=\"$i\">")
+    # end
+
     if left(i) < 2^(levels + 1)
+        push!(v,"<ul>")
         add_lines!(v, left(i))
         add_lines!(v, right(i))
+        push!(v, "</ul>")
     end
-    push!(v, "</ul>")
+
     push!(v, "</li>")
+    
+    
 
 end
 
