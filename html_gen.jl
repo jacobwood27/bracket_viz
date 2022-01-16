@@ -34,11 +34,12 @@ top1 = """
                       <th>NFC</th>
                       <th>AFC</th>
                       <th>SB</th>
-                      <th>PTS</th>
-                      <th>EVP</th>
-                      <th>MAX</th>
                     </tr>
 """
+
+# <th>PTS</th>
+# <th>EVP</th>
+# <th>MAX</th>
 
 top2 = """
                   </table>
@@ -87,6 +88,17 @@ bot = """
             }
         }
     }
+
+    function click_played_games() {
+        cC("2", "1L");
+        var e = document.getElementById("1L");
+        e.parentElement.classList.add("locked");
+
+        cC("4", "2L");
+        var e = document.getElementById("2L");
+        e.parentElement.classList.add("locked");
+    }
+    document.onload = click_played_games();
 </script>
 
 </html>
