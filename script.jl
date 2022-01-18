@@ -131,37 +131,37 @@ function get_teams(game_i, T)
     elseif game_i < 2^7
         # opp = maximum([winner(game_i,rnd,T) for rnd in [2,3,5]])
         # return (11,opp)
-        opp = maximum([winner(game_i,rnd,T) for rnd in [3,4,6]])
-        return (11,opp)
-
+        opp = maximum([winner(game_i,rnd,T) for rnd in [1,2,5]])
+        return (1,opp)
+        
     elseif game_i < 2^8
         # tms = sort([winner(game_i,rnd,T) for rnd in [1,4,6]])
         # return (tms[1],tms[2])
-        tms = sort([winner(game_i,rnd,T) for rnd in [1,2,5]])
-        return (tms[1],tms[2])
-    
+        opp = maximum([winner(game_i,rnd,T) for rnd in [3,4,6]])
+        return (11,opp)
+
     elseif game_i < 2^9
         # opp = maximum([winner(game_i,rnd,T) for rnd in [1,4,6]])
         # return (1,opp)
-        opp = maximum([winner(game_i,rnd,T) for rnd in [1,2,5]])
-        return (1,opp)
+        tms = sort([winner(game_i,rnd,T) for rnd in [3,4,6]])
+        return (tms[1],tms[2])
     
     elseif game_i < 2^10
         # tms = sort([winner(game_i,rnd,T) for rnd in [2,3,5]])
         # return (tms[1],tms[2])
-        tms = sort([winner(game_i,rnd,T) for rnd in [3,4,6]])
+        tms = sort([winner(game_i,rnd,T) for rnd in [1,2,5]])
         return (tms[1],tms[2])
 
     elseif game_i < 2^11
         # tms = sort([winner(game_i,rnd,T) for rnd in [8,9]])
         # return (tms[1],tms[2])
-        tms = sort([winner(game_i,rnd,T) for rnd in [8,9]])
+        tms = sort([winner(game_i,rnd,T) for rnd in [7,10]])
         return (tms[1],tms[2])
 
     elseif game_i < 2^12
         # tms = sort([winner(game_i,rnd,T) for rnd in [7,10]])
         # return (tms[1],tms[2])
-        tms = sort([winner(game_i,rnd,T) for rnd in [7,10]])
+        tms = sort([winner(game_i,rnd,T) for rnd in [8,9]])
         return (tms[1],tms[2])
 
     elseif game_i < 2^13
@@ -358,7 +358,7 @@ function get_score(pick,real)
 end
 
 function get_score_mat()
-    if isfile("score_matrix.csv")
+    if isfile("score_matrixkkk.csv")
         score_mat = readdlm("score_matrix.csv", ',', Int)
     else
         score_mat = zeros(Int, 2^13, 2^13)
@@ -791,8 +791,6 @@ function make_big_dic()
     BIG_DIC["scores"] = scores_dic
 
     BIG_DIC["picks"] = PICKS
-
-    BIG_DIC["sofar"] = ["TB", "SF"]
 
     BIG_DIC
 end
