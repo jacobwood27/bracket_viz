@@ -109,6 +109,10 @@ bot = """
         cC("34", "17L");
         var e = document.getElementById("17L");
         e.parentElement.classList.add("locked");
+
+        cC("68", "34L");
+        var e = document.getElementById("34L");
+        e.parentElement.classList.add("locked");
     }
     document.onload = click_played_games();
 </script>
