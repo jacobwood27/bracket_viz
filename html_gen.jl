@@ -113,6 +113,10 @@ bot = """
         cC("68", "34L");
         var e = document.getElementById("34L");
         e.parentElement.classList.add("locked");
+
+        cC("137", "68R");
+        var e = document.getElementById("68R");
+        e.parentElement.classList.add("locked");
     }
     document.onload = click_played_games();
 </script>
@@ -170,6 +174,7 @@ function right_tooltip(i::Int)
         probsR = BIG_DIC["right"]["$(right(i))"]
         sort_idx = sortperm(probs, rev = true)
         for i in sort_idx
+            # s = s * NAMES[i] * ": " * string(probs[i] * 100) * "% ($(probsL[i] * 100)%, $(probsR[i] * 100)%) <br />"
             s = s * NAMES[i] * ": " * string(Int(round(probs[i] * 100))) * "% ($(Int(round(probsL[i] * 100)))%, $(Int(round(probsR[i] * 100)))%) <br />"
         end
     else
