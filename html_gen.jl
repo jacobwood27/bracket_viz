@@ -97,38 +97,6 @@ bot = """
         cC("4", "2L");
         var e = document.getElementById("2L");
         e.parentElement.classList.add("locked");
-
-        cC("8", "4L");
-        var e = document.getElementById("4L");
-        e.parentElement.classList.add("locked");
-
-        cC("17", "8R");
-        var e = document.getElementById("8R");
-        e.parentElement.classList.add("locked");
-
-        cC("34", "17L");
-        var e = document.getElementById("17L");
-        e.parentElement.classList.add("locked");
-
-        cC("68", "34L");
-        var e = document.getElementById("34L");
-        e.parentElement.classList.add("locked");
-
-        cC("137", "68R");
-        var e = document.getElementById("68R");
-        e.parentElement.classList.add("locked");
-
-        cC("275", "137R");
-        var e = document.getElementById("137R");
-        e.parentElement.classList.add("locked");
-
-        cC("551", "275R");
-        var e = document.getElementById("275R");
-        e.parentElement.classList.add("locked");
-
-        cC("1102", "551L");
-        var e = document.getElementById("551L");
-        e.parentElement.classList.add("locked");
     }
     document.onload = click_played_games();
 </script>
