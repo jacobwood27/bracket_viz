@@ -254,11 +254,6 @@ li.hide{
     padding: 3px 3px;
 }
 
-table tbody tr:nth-of-type(even) {
-    background-color: #e0e0e0;
-}
-
-
   table td.wrong {
       color: red;
   }

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>NFL Playoffs Bracket</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .round {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+    }
+
+    .round h2 {
+      margin: 0;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    /* "Details/Summary" default toggling styles */
+    details {
+      margin-bottom: 0.5rem;
+      padding: 0.2rem 0.5rem;
+    }
+    details summary {
+      font-weight: bold;
+      cursor: pointer;
+      outline: none;
+    }
+    details summary::-webkit-details-marker {
+      display: none; /* hide default arrow in some browsers */
+    }
+
+    .game-block {
+      margin-left: 1.5rem;
+      padding: 0.5rem;
+    }
+
+    .winner {
+      font-weight: bold;
+      color: green;
+    }
+
+    .team-info {
+      display: inline-block;
+      min-width: 80px;
+    }
+
+    .elo {
+      color: gray;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>2025 NFL Playoffs Bracket</h1>
+
+  <!-- Container to hold the bracket structure -->
+  <div id="bracket"></div>
+
+  <script>
+    /*************************************
+     * Example data: seeds, Elo ratings *
+     *************************************/
+    const teamsAFC = [
+      { seed: 1, name: "KC",  elo: 1582 },
+      { seed: 2, name: "BUF", elo: 1576 },
+      { seed: 3, name: "BAL", elo: 1609 },
+      { seed: 4, name: "HOU", elo: 1502 },
+      { seed: 5, name: "LAC", elo: 1539 },
+      { seed: 6, name: "PIT", elo: 1507 },
+      { seed: 7, name: "DEN", elo: 1563 },
+    ];
+
+    const teamsNFC = [
+      { seed: 1, name: "DET", elo: 1613 },
+      { seed: 2, name: "PHI", elo: 1570 },
+      { seed: 3, name: "TB",  elo: 1557 },
+      { seed: 4, name: "LAR", elo: 1509 },
+      { seed: 5, name: "MIN", elo: 1546 },
+      { seed: 6, name: "WSH", elo: 1514 },
+      { seed: 7, name: "GB",  elo: 1565 },
+    ];
+
+    /***************************************************
+     * Example bracket structure for 7-team each side. *
+     * "wc"  = Wild Card round                         *
+     * "div" = Divisional round                        *
+     * "conf"= Conference Championship                 *
+     * "sb"  = Super Bowl                              *
+     ***************************************************/
+    const bracketData = {
+      AFC: {
+        wc: [ // wild-card matchups
+          { home: "BUF", away: "DEN" },
+          { home: "BAL", away: "PIT" },
+          { home: "HOU", away: "LAC" },
+        ],
+        bye: "KC" // #1 seed
+      },
+      NFC: {
+        wc: [
+          { home: "PHI", away: "GB" },
+          { home: "TB",  away: "WSH" },
+          { home: "LAR", away: "MIN" },
+        ],
+        bye: "DET"
+      }
+      // The winners of wc go on to "div" vs. the #1 seed (and so on)...
+      // For simplicity’s sake we’ll build child-rounds in code below.
+    };
+
+    /*************************************************
+     * Elo-based expected win probability            *
+     * (simple logistic function: 1/(1 + 10^((EloB-EloA)/400))) *
+     *************************************************/
+    function eloWinProb(eloA, eloB) {
+      return 1 / (1 + Math.pow(10, (eloB - eloA) / 400));
+    }
+
+    /****************************************************
+     * Given two team names, find them in the data      *
+     * and compute the expected winner.                 *
+     ****************************************************/
+    function predictWinner(teamA, teamB, allTeams) {
+      const a = allTeams.find((t) => t.name === teamA);
+      const b = allTeams.find((t) => t.name === teamB);
+      if (!a || !b) {
+        return {
+          winner: teamA + "??",
+          prob: 0.5,
+          eloA: 0,
+          eloB: 0,
+        };
+      }
+      const probA = eloWinProb(a.elo, b.elo);
+      const winner = probA >= 0.5 ? a.name : b.name;
+      return {
+        winner,
+        prob: probA >= 0.5 ? probA : 1 - probA,
+        eloA: a.elo,
+        eloB: b.elo,
+      };
+    }
+
+    /*******************************************************
+     * Create DOM structure for a single "Game" node.      *
+     * game = { home: "BUF", away: "DEN" }                 *
+     * round = "wc"                                        *
+     * league = "AFC" or "NFC"                             *
+     *******************************************************/
+    function createGameNode(game, round, league) {
+      // We need the correct data set
+      const teams = league === "AFC" ? teamsAFC : teamsNFC;
+      // Predict winner
+      const result = predictWinner(game.home, game.away, teams);
+
+      // Create HTML
+      const container = document.createElement("details");
+      const summary = document.createElement("summary");
+      summary.innerText = `(${round.toUpperCase()}) ${game.home} vs ${game.away}`;
+      container.appendChild(summary);
+
+      const block = document.createElement("div");
+      block.classList.add("game-block");
+      block.innerHTML = `
+        <div>
+          <span class="team-info">
+            <strong>${game.home}</strong> 
+            <span class="elo">[Elo: ${result.eloA}]</span>
+          </span>
+          vs.
+          <span class="team-info">
+            <strong>${game.away}</strong> 
+            <span class="elo">[Elo: ${result.eloB}]</span>
+          </span>
+        </div>
+        <div>
+          Predicted Winner: <span class="winner">${result.winner}</span>
+          (${(result.prob * 100).toFixed(1)}% chance)
+        </div>
+      `;
+
+      container.appendChild(block);
+
+      return container;
+    }
+
+    /*******************************************************
+     * Build out the bracket UI for each conference        *
+     *******************************************************/
+    function buildConferenceBracket(bracketObj, conferenceName) {
+      const container = document.createElement("div");
+      container.classList.add("round");
+
+      const confHeader = document.createElement("h2");
+      confHeader.innerText = conferenceName + " Bracket";
+      container.appendChild(confHeader);
+
+      // Round: Wild Card
+      const wcDetails = document.createElement("details");
+      const wcSummary = document.createElement("summary");
+      wcSummary.innerText = "Wild Card Round";
+      wcDetails.appendChild(wcSummary);
+      bracketObj.wc.forEach((game) => {
+        wcDetails.appendChild(createGameNode(game, "wc", conferenceName));
+      });
+      container.appendChild(wcDetails);
+
+      // Round: Divisional (example)
+      // For simplicity, we assume the #1 seed faces the lowest remaining
+      // We won't fully automate that logic, but you could do so in code.
+      const divDetails = document.createElement("details");
+      const divSummary = document.createElement("summary");
+      divSummary.innerText = "Divisional Round";
+      divDetails.appendChild(divSummary);
+
+      // One game is the #1 seed vs. "lowest remaining from wc"
+      const divGame1 = createGameNode(
+        { home: bracketObj.bye, away: "(lowest-wc-winner?)" },
+        "div",
+        conferenceName
+      );
+      divDetails.appendChild(divGame1);
+
+      // Another example Divisional game
+      const divGame2 = createGameNode(
+        { home: "(wc-winner1?)", away: "(wc-winner2?)" },
+        "div",
+        conferenceName
+      );
+      divDetails.appendChild(divGame2);
+
+      container.appendChild(divDetails);
+
+      // Round: Conference Championship (example placeholder)
+      const confDetails = document.createElement("details");
+      const confSumm = document.createElement("summary");
+      confSumm.innerText = "Conference Championship";
+      confDetails.appendChild(confSumm);
+      confDetails.appendChild(
+        createGameNode(
+          { home: "(div-winner1?)", away: "(div-winner2?)" },
+          "conf",
+          conferenceName
+        )
+      );
+      container.appendChild(confDetails);
+
+      return container;
+    }
+
+    /************************************************
+     * Build the entire bracket (both conferences)  *
+     ************************************************/
+    function buildBracket() {
+      const bracketElem = document.getElementById("bracket");
+
+      // Build AFC
+      const afcBracket = buildConferenceBracket(bracketData.AFC, "AFC");
+      bracketElem.appendChild(afcBracket);
+
+      // Build NFC
+      const nfcBracket = buildConferenceBracket(bracketData.NFC, "NFC");
+      bracketElem.appendChild(nfcBracket);
+
+      // Super Bowl (placeholder)
+      const sbDiv = document.createElement("div");
+      sbDiv.classList.add("round");
+
+      const sbHeader = document.createElement("h2");
+      sbHeader.innerText = "Super Bowl";
+      sbDiv.appendChild(sbHeader);
+
+      sbDiv.appendChild(
+        createGameNode(
+          { home: "(AFC Champion)", away: "(NFC Champion)" },
+          "sb",
+          "AFC" // Elo-based guess from either set is arbitrary; you could combine them
+        )
+      );
+      bracketElem.appendChild(sbDiv);
+    }
+
+    // On page load, build out the bracket
+    buildBracket();
+  </script>
+</body>
+</html>

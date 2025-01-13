@@ -97,7 +97,19 @@ bot = """
         cC("4", "2L");
         var e = document.getElementById("2L");
         e.parentElement.classList.add("locked");
-    }
+
+        cC("8", "4L");
+        var e = document.getElementById("4L");
+        e.parentElement.classList.add("locked");
+
+        cC("16", "8L");
+        var e = document.getElementById("8L");
+        e.parentElement.classList.add("locked");
+ 
+        cC("33", "16R");
+        var e = document.getElementById("16R");
+        e.parentElement.classList.add("locked");
+        }
     document.onload = click_played_games();
 </script>
 
@@ -147,23 +159,41 @@ end
 
 NAMES = BIG_DIC["names"]
 function right_tooltip(i::Int)
-    s = ""
+    s = "<table>"
+    s *= "<tr>"
+    s *= "<th>Name</th>"
+    s *= "<th>Total</th>"
+    if i < 2^12
+        s *= "<th>Left</th>"
+        s *= "<th>Right</th>"
+    end
+    s *= "</tr>"
+    
     if i < 2^12
         probs = BIG_DIC["right"]["$i"]
         probsL = BIG_DIC["right"]["$(left(i))"]
         probsR = BIG_DIC["right"]["$(right(i))"]
         sort_idx = sortperm(probs, rev = true)
         for i in sort_idx
-            # s = s * NAMES[i] * ": " * string(probs[i] * 100) * "% ($(probsL[i] * 100)%, $(probsR[i] * 100)%) <br />"
-            s = s * NAMES[i] * ": " * string(Int(round(probs[i] * 100))) * "% ($(Int(round(probsL[i] * 100)))%, $(Int(round(probsR[i] * 100)))%) <br />"
+            s *= "<tr>"
+            s *= "<td>" * NAMES[i] * "</td>"
+            s *= "<td>" * string(Int(round(probs[i] * 100))) * "%</td>"
+            s *= "<td>" * string(Int(round(probsL[i] * 100))) * "%</td>"
+            s *= "<td>" * string(Int(round(probsR[i] * 100))) * "%</td>"
+            s *= "</tr>"
         end
     else
         probs = BIG_DIC["right"]["$i"]
         sort_idx = sortperm(probs, rev = true)
         for i in sort_idx
-            s = s * NAMES[i] * ": " * string(Int(round(probs[i] * 100))) * "% <br />"
+            s *= "<tr>"
+            s *= "<td>" * NAMES[i] * "</td>"
+            s *= "<td>" * string(Int(round(probs[i] * 100))) * "%</td>"
+            s *= "</tr>"
         end
     end
+    
+    s *= "</table>"
     s
 end
 
