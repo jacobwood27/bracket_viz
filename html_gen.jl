@@ -159,13 +159,14 @@ end
 
 NAMES = BIG_DIC["names"]
 function right_tooltip(i::Int)
+    teams = BIG_DIC["main"]["$i"]
     s = "<table>"
     s *= "<tr>"
     s *= "<th>Name</th>"
     s *= "<th>Total</th>"
     if i < 2^12
-        s *= "<th>Left</th>"
-        s *= "<th>Right</th>"
+        s *= "<th>$(teams[1])</th>"
+        s *= "<th>$(teams[2])</th>"
     end
     s *= "</tr>"
     
